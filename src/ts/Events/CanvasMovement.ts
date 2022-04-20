@@ -17,7 +17,7 @@ export class CanvasMovement {
 
     private constructor() {
         this.windowNumber = 5
-        this.windowSizes = [5, 10, 25, 33.3, 50, 66.6, 75, 100, 125, 150, 175, 200, 250, 300, 400, 600, 800, 1200, 1600, 2400, 3200]
+        this.windowSizes = [5, 10, 25, 33.3, 50, 66.6, 75, 100, 125, 150, 175, 200, 250, 300, 400, 600, 800, 1200, 1600]
         this.workspace = document.getElementById('workspace')
 
         // Handle Zoom and Wheel movement up/down and left/right
