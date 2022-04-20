@@ -2,6 +2,7 @@
 
 import { Export } from '../Classes & Functions/Export'
 import { GUIEvents } from '../Classes & Functions/GUIEvents'
+import { debugText } from '../Classes & Functions/Mini-Functions'
 import CreateFrameAtSelected from '../Commands/Implementation/CreateFrameAtSelected'
 import RemoveFrame from '../Commands/Implementation/RemoveFrame'
 import Redo from '../Commands/Redo'
@@ -15,6 +16,7 @@ import LoadDocument from '../Persistence/LoadDocument'
 import NewDocument from '../Persistence/NewDocument'
 import SaveASDocument from '../Persistence/SaveASDocument'
 import SaveDocument from '../Persistence/SaveDocument'
+import { CanvasMovement } from './CanvasMovement'
 
 export class KeyboardShortcuts {
     private static instance: KeyboardShortcuts
@@ -48,7 +50,7 @@ export class KeyboardShortcuts {
     }
 
     keydownCtrl = (event: KeyboardEvent) => {
-        if (event.ctrlKey && !event.shiftKey && !event.altKey) {
+        if (event.ctrlKey && !event.shiftKey && !event.altKey && document.body.style.cursor !== 'grabbing') {
             switch (event.code) {
                 case 'KeyZ':
                     // Undo
@@ -92,7 +94,7 @@ export class KeyboardShortcuts {
     }
 
     keydownAlt = (event: KeyboardEvent) => {
-        if (event.altKey && !event.shiftKey && !event.ctrlKey) {
+        if (event.altKey && !event.shiftKey && !event.ctrlKey && document.body.style.cursor !== 'grabbing') {
             let newFrameBuilder: FrameBuilder
 
             switch (event.code) {
@@ -119,6 +121,33 @@ export class KeyboardShortcuts {
                     newFrameBuilder.height = 0.07
                     new CreateFrameAtSelected(newFrameBuilder).run()
                     break
+                case 'Digit1':
+                    // Move canvas to center
+                    debugText('Canvas to 100% Scale')
+                    CanvasMovement.getInstance().scale = 100
+                    break
+                case 'Digit2':
+                    // Move canvas to center
+                    if (document.body.style.cursor !== 'grabbing') {
+                        CanvasMovement.getInstance().scale = 50
+                        debugText('Canvas to 50% Scale')
+                    }
+                    break
+                case 'Digit3':
+                    // Move canvas to center
+                    debugText('Canvas to 33.3% Scale')
+                    CanvasMovement.getInstance().scale = 33.3
+                    break
+                case 'Digit4':
+                    // Move canvas to center
+                    debugText('Canvas to 25% Scale')
+                    CanvasMovement.getInstance().scale = 25
+                    break
+                case 'KeyC':
+                    // Move canvas to center
+                    debugText('Center Canvas')
+                    CanvasMovement.getInstance().moveToCenter()
+                    break
                 default:
                     break
             }
@@ -126,7 +155,7 @@ export class KeyboardShortcuts {
     }
 
     keydownCtrlShift = (event: KeyboardEvent) => {
-        if (event.ctrlKey && event.shiftKey && !event.altKey) {
+        if (event.ctrlKey && event.shiftKey && !event.altKey && document.body.style.cursor !== 'grabbing') {
             switch (event.code) {
                 case 'KeyZ':
                     // Redo
@@ -155,7 +184,7 @@ export class KeyboardShortcuts {
     }
 
     keydownAltShift = (event: KeyboardEvent) => {
-        if (event.altKey && event.shiftKey && !event.ctrlKey) {
+        if (event.altKey && event.shiftKey && !event.ctrlKey && document.body.style.cursor !== 'grabbing') {
             switch (event.code) {
                 case 'KeyS':
                     // Background with UI
@@ -169,6 +198,26 @@ export class KeyboardShortcuts {
                     // Browse for Custom Background
                     new CustomBackground().run()
                     break
+                case 'Digit1':
+                    // Move canvas to center
+                    debugText('Canvas to 100% Scale')
+                    CanvasMovement.getInstance().scale = 100
+                    break
+                case 'Digit2':
+                    // Move canvas to center
+                    debugText('Canvas to 200% Scale')
+                    CanvasMovement.getInstance().scale = 200
+                    break
+                case 'Digit3':
+                    // Move canvas to center
+                    debugText('Canvas to 300% Scale')
+                    CanvasMovement.getInstance().scale = 300
+                    break
+                case 'Digit4':
+                    // Move canvas to center
+                    debugText('Canvas to 400% Scale')
+                    CanvasMovement.getInstance().scale = 400
+                    break
                 default:
                     break
             }
@@ -176,54 +225,56 @@ export class KeyboardShortcuts {
     }
 
     keydownNoMod = (event: KeyboardEvent) => {
-        const par = ParameterEditor.inst()
-        switch (event.which) {
-            case 46:
-                // Delete Frame
-                if (ProjectTree.getSelected()) {
-                    const command = new RemoveFrame(ProjectTree.getSelected())
-                    command.action()
-                }
-                break
+        if (document.body.style.cursor !== 'grabbing') {
+            const par = ParameterEditor.inst()
+            switch (event.which) {
+                case 46:
+                    // Delete Frame
+                    if (ProjectTree.getSelected()) {
+                        const command = new RemoveFrame(ProjectTree.getSelected())
+                        command.action()
+                    }
+                    break
 
-            case 37:
-                //left
-                if (ProjectTree.getSelected()) {
-                    par.inputElementCoordinateX.value = (+par.inputElementCoordinateX.value - 0.0005).toFixed(5)
-                    if (!event.shiftKey) par.inputElementCoordinateX.value = (+par.inputElementCoordinateX.value - 0.0095).toFixed(5)
-                    par.inputElementCoordinateX.dispatchEvent(new Event('change'))
-                }
-                break
+                case 37:
+                    //left
+                    if (ProjectTree.getSelected()) {
+                        par.inputElementCoordinateX.value = (+par.inputElementCoordinateX.value - 0.0005).toFixed(5)
+                        if (!event.shiftKey) par.inputElementCoordinateX.value = (+par.inputElementCoordinateX.value - 0.0095).toFixed(5)
+                        par.inputElementCoordinateX.dispatchEvent(new Event('change'))
+                    }
+                    break
 
-            case 38:
-                //up
-                if (ProjectTree.getSelected()) {
-                    par.inputElementCoordinateY.value = (+par.inputElementCoordinateY.value + 0.0005).toFixed(5)
-                    if (!event.shiftKey) par.inputElementCoordinateY.value = (+par.inputElementCoordinateY.value + 0.0095).toFixed(5)
-                    par.inputElementCoordinateY.dispatchEvent(new Event('change'))
-                }
-                break
+                case 38:
+                    //up
+                    if (ProjectTree.getSelected()) {
+                        par.inputElementCoordinateY.value = (+par.inputElementCoordinateY.value + 0.0005).toFixed(5)
+                        if (!event.shiftKey) par.inputElementCoordinateY.value = (+par.inputElementCoordinateY.value + 0.0095).toFixed(5)
+                        par.inputElementCoordinateY.dispatchEvent(new Event('change'))
+                    }
+                    break
 
-            case 39:
-                //right
-                if (ProjectTree.getSelected()) {
-                    par.inputElementCoordinateX.value = (+par.inputElementCoordinateX.value + 0.0005).toFixed(5)
-                    if (!event.shiftKey) par.inputElementCoordinateX.value = (+par.inputElementCoordinateX.value + 0.0095).toFixed(5)
-                    par.inputElementCoordinateX.dispatchEvent(new Event('change'))
-                }
-                break
+                case 39:
+                    //right
+                    if (ProjectTree.getSelected()) {
+                        par.inputElementCoordinateX.value = (+par.inputElementCoordinateX.value + 0.0005).toFixed(5)
+                        if (!event.shiftKey) par.inputElementCoordinateX.value = (+par.inputElementCoordinateX.value + 0.0095).toFixed(5)
+                        par.inputElementCoordinateX.dispatchEvent(new Event('change'))
+                    }
+                    break
 
-            case 40:
-                //down
-                if (ProjectTree.getSelected()) {
-                    par.inputElementCoordinateY.value = (+par.inputElementCoordinateY.value - 0.0005).toFixed(5)
-                    if (!event.shiftKey) par.inputElementCoordinateY.value = (+par.inputElementCoordinateY.value - 0.0095).toFixed(5)
-                    par.inputElementCoordinateY.dispatchEvent(new Event('change'))
-                }
-                break
+                case 40:
+                    //down
+                    if (ProjectTree.getSelected()) {
+                        par.inputElementCoordinateY.value = (+par.inputElementCoordinateY.value - 0.0005).toFixed(5)
+                        if (!event.shiftKey) par.inputElementCoordinateY.value = (+par.inputElementCoordinateY.value - 0.0095).toFixed(5)
+                        par.inputElementCoordinateY.dispatchEvent(new Event('change'))
+                    }
+                    break
 
-            default:
-                break
+                default:
+                    break
+            }
         }
     }
 }

@@ -131,11 +131,14 @@ Element.formIMG.addEventListener("submit", e => {
 */
 try {
     window.onresize = () => {
+        canvasMovement.moveToCenter()
         ProjectTree.refreshElements()
     }
 
     // Init Canvas Movement
     const canvasMovement = CanvasMovement.getInstance()
+    canvasMovement.scale = 50
+    canvasMovement.moveToCenter()
 
     //keyboard shortcuts
     const keyboardShortcuts = KeyboardShortcuts.getInstance()

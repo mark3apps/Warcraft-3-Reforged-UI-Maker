@@ -31,6 +31,51 @@ export class CanvasMovement {
         }
     }
 
+    get scale() {
+        return (this.workspace.offsetHeight * 100) / 1080
+    }
+
+    set scale(value: number) {
+        const currentHeight = this.workspace.offsetHeight
+        const height = (value / 100) * 1080
+        const heightDiff = height - currentHeight
+        this.left -= heightDiff / 1.5
+        this.top -= heightDiff / 2
+        this.workspace.style.height = height.toString() + 'px'
+    }
+
+    get height() {
+        return this.workspace.offsetHeight
+    }
+
+    set height(value: number) {
+        const currentHeight = this.workspace.offsetHeight
+        const heightDiff = currentHeight - value
+        this.left -= heightDiff / 1.5
+        this.top -= heightDiff / 2
+        this.workspace.style.height = value.toString() + 'px'
+    }
+
+    get left() {
+        return this.workspace.offsetLeft
+    }
+
+    set left(value: number) {
+        this.workspace.style.left = value.toString() + 'px'
+    }
+
+    get top() {
+        return this.workspace.offsetTop
+    }
+
+    set top(value: number) {
+        this.workspace.style.top = value.toString() + 'px'
+    }
+
+    get width() {
+        return this.workspace.offsetWidth
+    }
+
     onWheel = (event: WheelEvent) => {
         if (event.altKey) {
             this.zoomCanvas(event)
@@ -58,8 +103,8 @@ export class CanvasMovement {
 
                 debugText('Move Canvas')
 
-                this.workspace.style.left = `${this.workspace.offsetLeft - posX2}px`
-                this.workspace.style.top = `${this.workspace.offsetTop - posY2}px`
+                this.left -= posX2
+                this.top -= posY2
                 ProjectTree.refreshElements()
             }
 
@@ -75,23 +120,11 @@ export class CanvasMovement {
     zoomCanvas = (event: WheelEvent) => {
         event.preventDefault()
 
-        const height = this.workspace.offsetHeight
-        let left = this.workspace.offsetLeft
-        let top = this.workspace.offsetTop
-
         const changeAmount = -event.deltaY * 0.01
-        let newHeight: number
-
         if (this.windowNumber + changeAmount > 0 && this.windowNumber + changeAmount < this.windowSizes.length - 1) {
             this.windowNumber += changeAmount
-            newHeight = (this.windowSizes[this.windowNumber] / 100) * 1080
 
-            left += (height - newHeight) / 1.5
-            top += (height - newHeight) / 2
-
-            this.workspace.style.left = left + 'px'
-            this.workspace.style.top = top + 'px'
-            this.workspace.style.height = newHeight + 'px'
+            this.scale = this.windowSizes[this.windowNumber]
             ProjectTree.refreshElements()
         }
     }
@@ -100,7 +133,8 @@ export class CanvasMovement {
         const changeAmount = event.deltaY
         let top = this.workspace.offsetTop
         top -= changeAmount
-        this.workspace.style.top = top.toString() + 'px'
+
+        this.top = top
         ProjectTree.refreshElements()
     }
 
@@ -109,6 +143,17 @@ export class CanvasMovement {
         let left = this.workspace.offsetLeft
         left -= changeAmount
         this.workspace.style.left = left.toString() + 'px'
+
+        this.left = left
         ProjectTree.refreshElements()
+    }
+
+    moveToCenter() {
+        const workspaceContainer = document.getElementById('workspaceContainer')
+        const windowWidth = workspaceContainer.offsetWidth
+        const windowHeight = workspaceContainer.offsetHeight
+
+        this.left = (windowWidth - this.width) / 2
+        this.top = (windowHeight - this.height) / 2
     }
 }
