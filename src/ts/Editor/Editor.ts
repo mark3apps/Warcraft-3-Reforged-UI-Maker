@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint @typescript-eslint/no-explicit-any: ["off", { "ignoreRestArgs": false }] */
+
 import { FrameBuilder } from './FrameLogic/FrameBuilder'
 import { FrameType } from './FrameLogic/FrameType & FrameRequire'
 import { RibbonMenu } from './Menus/RibbonMenu'
@@ -80,7 +81,7 @@ export class Editor {
         expRib.addMenuOption('LUA', new Export(false, 'lua'))
         expRib.addMenuOption('TYPESCRIPT', new Export(false, 'ts'))
 
-        const expRibAs = new RibbonOption('Export As', null)
+        const expRibAs = new RibbonOption('Export to File', null)
         fileMenu.addRibbonOption(expRibAs)
         expRibAs.addMenuOption('JASS', new Export(true, 'jass'))
         expRibAs.addMenuOption('LUA', new Export(true, 'lua'))

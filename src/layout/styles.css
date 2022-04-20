@@ -177,12 +177,12 @@ body{
 }
 
 #workspaceContainer #workspace{
-    position: relative;
-    height: 85%;
-    width:auto;
+    position: absolute;
+    height: 540px;
+    left: 250px;
+    width: auto;
     margin: auto;
-    margin-top: 3px;
-    
+    margin-top: 0px;
 }
 
 #panelTree{
