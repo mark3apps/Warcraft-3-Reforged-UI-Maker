@@ -34,10 +34,10 @@ export class CanvasMovement {
     onWheel = (event: WheelEvent) => {
         if (event.altKey) {
             this.zoomCanvas(event)
-        } else if (!event.altKey && !event.shiftKey && !event.ctrlKey) {
-            this.moveCanvasVertical(event)
-        } else if (!event.altKey && event.shiftKey && !event.ctrlKey) {
-            this.moveCanvasHorizontal(event)
+            // } else if (!event.altKey && !event.shiftKey && !event.ctrlKey) {
+            //     this.moveCanvasVertical(event)
+            // } else if (!event.altKey && event.shiftKey && !event.ctrlKey) {
+            //     this.moveCanvasHorizontal(event)
         }
     }
 
